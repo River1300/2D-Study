@@ -14,6 +14,9 @@ public class C1PlayerAction : MonoBehaviour
     Animator anim;
     // [4] Ray : 1) Ray를 발사할 방향 Vector
     Vector3 dirVec;
+    GameObject scanObject;
+    // [5] Object Name
+    public C2GameManager manager;
 
     void Awake()
     {
@@ -24,6 +27,13 @@ public class C1PlayerAction : MonoBehaviour
     void Update()
     {   
         PlayerMove();
+
+        // [4] Ray : 5) 스페이스바 입력을 받으면 오브젝트와 상호 작용한다.
+        if(Input.GetButtonDown("Jump") && scanObject != null)
+        {
+            // [5] Object Name
+            manager.Action(scanObject);
+        }
     }
 
     void FixedUpdate()
@@ -35,20 +45,30 @@ public class C1PlayerAction : MonoBehaviour
 
         // [4] Ray : 3) Ray를 게임 씬에 시각화
         Debug.DrawRay(rigid.position, dirVec * 0.7f, new Color(0, 1, 0));
+        // [4] Ray : 4) Ray를 통해 오직 Object 레이어의 정보만을 받는다.
+        RaycastHit2D rayHit = Physics2D.Raycast(rigid.position, dirVec, 0.7f, LayerMask.GetMask("Object"));
+        if(rayHit.collider != null)
+        {
+            scanObject = rayHit.collider.gameObject;
+        }
+        else
+        {
+            scanObject = null;
+        }
     }
 
     void PlayerMove()
     {
         // [1] Player Move
-        h = Input.GetAxisRaw("Horizontal");
-        v = Input.GetAxisRaw("Vertical");
+        h = manager.isAction ? 0 : Input.GetAxisRaw("Horizontal");
+        v = manager.isAction ? 0 : Input.GetAxisRaw("Vertical");
 
         // [2] Cross Move : 3) 입력받은 버튼을 저장하고 그 값에 따라 수평값이 참인지 거짓인지 배정
         // [3] Animation : 2) 동시에 키 입력이 있을 경우 방향을 잡지 못하는 경우가 발생한다. 버튼을 때었을 때 수평 값이 있는지 없는지를 확인한다.
-        bool hDown = Input.GetButtonDown("Horizontal");
-        bool vDown = Input.GetButtonDown("Vertical");
-        bool hUp = Input.GetButtonDown("Horizontal");
-        bool vUp = Input.GetButtonDown("Vertical");
+        bool hDown = manager.isAction ? false : Input.GetButtonDown("Horizontal");
+        bool vDown = manager.isAction ? false : Input.GetButtonDown("Vertical");
+        bool hUp = manager.isAction ? false : Input.GetButtonDown("Horizontal");
+        bool vUp = manager.isAction ? false : Input.GetButtonDown("Vertical");
         if(hDown)
             isHorizonMove = true;
         else if(vDown)
