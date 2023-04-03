@@ -12,6 +12,8 @@ public class C1PlayerAction : MonoBehaviour
     bool isHorizonMove;
     // [3] Animation
     Animator anim;
+    // [4] Ray : 1) Ray를 발사할 방향 Vector
+    Vector3 dirVec;
 
     void Awake()
     {
@@ -30,6 +32,9 @@ public class C1PlayerAction : MonoBehaviour
 
         // [1] Player Move
         rigid.velocity = moveVec * speed;
+
+        // [4] Ray : 3) Ray를 게임 씬에 시각화
+        Debug.DrawRay(rigid.position, dirVec * 0.7f, new Color(0, 1, 0));
     }
 
     void PlayerMove()
@@ -65,5 +70,15 @@ public class C1PlayerAction : MonoBehaviour
         {
             anim.SetBool("isMove", false);
         }
+
+        // [4] Ray : 2) Ray Vector3의 방향을 배정
+        if(vDown && v == 1)
+            dirVec = Vector3.up;
+        else if(vDown && v == -1)
+            dirVec = Vector3.down;
+        else if(hDown && h == -1)
+            dirVec = Vector3.left;
+        else if(hDown && h == 1)
+            dirVec = Vector3.right;
     }
 }
