@@ -72,13 +72,16 @@ public class C1PlayerAction : MonoBehaviour
         }
 
         // [4] Ray : 2) Ray Vector3의 방향을 배정
-        if(vDown && v == 1)
-            dirVec = Vector3.up;
-        else if(vDown && v == -1)
-            dirVec = Vector3.down;
-        else if(hDown && h == -1)
-            dirVec = Vector3.left;
-        else if(hDown && h == 1)
-            dirVec = Vector3.right;
+        if(anim.GetBool("isMove"))
+        {
+            if(v == 1)
+                dirVec = Vector3.up;
+            else if(v == -1)
+                dirVec = Vector3.down;
+            else if(h == -1)
+                dirVec = Vector3.left;
+            else if(h == 1)
+                dirVec = Vector3.right;
+        }
     }
 }
