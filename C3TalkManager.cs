@@ -34,6 +34,11 @@ public class C3TalkManager : MonoBehaviour
         portraitData.Add(2000 + 1, portraitArr[5]);
         portraitData.Add(2000 + 2, portraitArr[6]);
         portraitData.Add(2000 + 3, portraitArr[7]);
+
+        // [11] Quest Structure : 7) 기존 NPCID에 퀘스트 인덱스를 더한 값을 key로 지정하여 대사를 저장한다.
+        talkData.Add(10 + 1000, new string[] {"길잃은 아이야.:0", "너의 길은 호수에 밝혀저 있다.:0"});
+        talkData.Add(11 + 2000, new string[] {"아낙 쑤나문!:3", "나의 아낙 쑤나문을 잃어 버렸어...:1", "그대는?!?!:3"});
+        
     }
 
     // [8] Talk : 1) 문자열을 배열로 넣었으므로 배열의 인덱스를 통해 원하는 대사를 반환한다.

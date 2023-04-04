@@ -16,6 +16,8 @@ public class C2GameManager : MonoBehaviour
     public int talkIndex;
     // [10] Portrait : 1) 알파값을 조절할 UI 이미지
     public Image portraitImg;
+    // [11] Quest Structure
+    public C4QuestManager questManager;
 
     public void Action(GameObject scanObj)
     {
@@ -30,13 +32,18 @@ public class C2GameManager : MonoBehaviour
     // [8] Talk : 4) 대사를 반환 받으면 문자열로 저장한다.
     void Talk(int id, bool isNpc)
     {
-        string talkData = talkManager.GetTalk(id, talkIndex);
+        // [11] Quest Structure : 2) 해당 오브젝트의 퀘스트 아이디를 받아온다.
+        // [11] Quest Structure : 3) 대화문을 반환받을 때 매개 변수로 퀘스트 번호를 더한 값을 보낸다.
+        int questTalkIndex = questManager.GetQuestTalkIndex(id);
+        string talkData = talkManager.GetTalk(id + questTalkIndex, talkIndex);
 
         // [9] Long Talk : 2) 대사를 반환받지 못하고 null을 전환 받았다면 해당 오브젝트와의 대화가 끝났다는 의미
         if(talkData == null)
         {
             isAction = false;
             talkIndex = 0;
+            // [11] Quest Structure : 6) 대화가 끝나면 퀘스트 인덱스가 증가한다.
+            questManager.CheckQuest(id);
             return;
         }
 
