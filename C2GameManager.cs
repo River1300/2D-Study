@@ -14,6 +14,8 @@ public class C2GameManager : MonoBehaviour
     // [8] Talk
     public C3TalkManager talkManager;
     public int talkIndex;
+    // [10] Portrait : 1) 알파값을 조절할 UI 이미지
+    public Image portraitImg;
 
     public void Action(GameObject scanObj)
     {
@@ -40,11 +42,18 @@ public class C2GameManager : MonoBehaviour
 
         if(isNpc)
         {
-            talkText.text = talkData;
+            // [10] Portrait : 5) 대화문의 문자열을 구분자로 나누고 구분자 앞은 출력, 뒤는 초상화 인덱스로 활용한다.
+            talkText.text = talkData.Split(':')[0];
+            portraitImg.sprite = talkManager.GetPortrait(id, int.Parse(talkData.Split(':')[1]));
+
+            // [10] Portrait
+            portraitImg.color = new Color(1, 1, 1, 1);
         }
         else
         {
             talkText.text = talkData;
+
+            portraitImg.color = new Color(1, 1, 1, 0);
         }
         isAction = true;
 
