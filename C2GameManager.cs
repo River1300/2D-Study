@@ -43,7 +43,7 @@ public class C2GameManager : MonoBehaviour
             isAction = false;
             talkIndex = 0;
             // [11] Quest Structure : 6) 대화가 끝나면 퀘스트 인덱스가 증가한다.
-            questManager.CheckQuest(id);
+            Debug.Log(questManager.CheckQuest(id));
             return;
         }
 

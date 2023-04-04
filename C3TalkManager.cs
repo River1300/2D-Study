@@ -39,6 +39,10 @@ public class C3TalkManager : MonoBehaviour
         talkData.Add(10 + 1000, new string[] {"길잃은 아이야.:0", "너의 길은 호수에 밝혀저 있다.:0"});
         talkData.Add(11 + 2000, new string[] {"아낙 쑤나문!:3", "나의 아낙 쑤나문을 잃어 버렸어...:1", "그대는?!?!:3"});
         
+        talkData.Add(20 + 2000, new string[] {"그녀라면 나의 아낙 쑤나문이 어디있는지 알거야.:3"});
+        talkData.Add(21 + 1000, new string[] {"아낙 쑤나문?:3", "그게 뭐지?:1", "아! 혹시 행운에 동전을 말하는 걸까?:2"});
+        talkData.Add(22 + 5000, new string[] {"금화를 찾았다!"});
+        talkData.Add(23 + 2000, new string[] {"오! 나의 아낙 쑤나문!!!:2"});
     }
 
     // [8] Talk : 1) 문자열을 배열로 넣었으므로 배열의 인덱스를 통해 원하는 대사를 반환한다.
