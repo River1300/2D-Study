@@ -49,6 +49,22 @@ public class C3TalkManager : MonoBehaviour
     // [8] Talk : 2) 해당 오브젝트의 대사를 반환하기 위해 해당 오브젝트의 ID를 받는다.
     public string GetTalk(int id, int talkIndex)
     {
+        // [14] Exception : 1) 매개 변수로 전달받은 id로 Dictionary에 key가 있는지 확인하고 해당 key에 대한 value가 없다면 퀘스트 id를 제거한 오브젝트 id만 전달하여 이전 퀘스트 대화문을 다시 출력한다. 
+        if(!talkData.ContainsKey(id))
+        {
+            // [14] Exception : 2) 그런데 만약 퀘스트 대화문이 없는 오브젝트라면? 일반 대화문을 출력한다.
+            if(!talkData.ContainsKey(id - id % 10))
+            {
+                if(talkIndex == talkData[id - id %100].Length) return null;
+                else return GetTalk(id - id % 100, talkIndex);
+            }
+            else
+            {   
+                if(talkIndex == talkData[id - id %10].Length) return null;
+                else return GetTalk(id - id % 10, talkIndex);
+            }
+        }
+
         // [9] Long Talk : 1) 게임 매니저로 부터 받은 인덱스가 대화 배열의 갯수와 같게된다면 대화를 마친다.
         if(talkIndex == talkData[id].Length)
         {
