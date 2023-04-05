@@ -67,8 +67,8 @@ public class C1PlayerAction : MonoBehaviour
         // [3] Animation : 2) 동시에 키 입력이 있을 경우 방향을 잡지 못하는 경우가 발생한다. 버튼을 때었을 때 수평 값이 있는지 없는지를 확인한다.
         bool hDown = manager.isAction ? false : Input.GetButtonDown("Horizontal");
         bool vDown = manager.isAction ? false : Input.GetButtonDown("Vertical");
-        bool hUp = manager.isAction ? false : Input.GetButtonDown("Horizontal");
-        bool vUp = manager.isAction ? false : Input.GetButtonDown("Vertical");
+        bool hUp = manager.isAction ? false : Input.GetButtonUp("Horizontal");
+        bool vUp = manager.isAction ? false : Input.GetButtonUp("Vertical");
         if(hDown)
             isHorizonMove = true;
         else if(vDown)
@@ -77,6 +77,7 @@ public class C1PlayerAction : MonoBehaviour
             isHorizonMove = h != 0;
 
         // [3] Animation : 1) 중복되는 값을 계속해서 전달하지 않도록 제어
+        // [3] Animation : 3) 수평 버튼을 누른 상태에서 수직 버튼을 누를 경우 이동은 하지만 애니매이션은 계속 수평 방향이다. 애니메이터 -> 트랜지션 -> Can Transition To Self를 해제한다.
         if(anim.GetInteger("hAxisRaw") != h)
         {
             anim.SetBool("isMove", true);
