@@ -68,6 +68,7 @@ public class C4QuestManager : MonoBehaviour
                     questObject[0].SetActive(true);
                 break;
             case 20:
+                // [22] Save : 2) 게임 로드할 때 게임 오브젝트를 소환
                 if(questActionIndex == 0)
                     questObject[0].SetActive(true);
                 else if(questActionIndex == 3)

@@ -22,10 +22,39 @@ public class C2GameManager : MonoBehaviour
     // [15] Portrait Anim
     public Animator portraitAnim;
     public Sprite prevPortrait;
+    // [19] Menu Set
+    public GameObject menuSet;
+    // [20] Title
+    public Text questText;
+    // [22] Save
+    public GameObject player;
 
     void Start()
     {
-        Debug.Log(questManager.CheckQuest());
+        // [22] Save
+        GameLoad();
+        // [20] Title
+        questText.text = questManager.CheckQuest();
+    }
+
+    void Update()
+    {
+        // [19] Menu Set : 1) ESC 버튼을 누를 경우 매뉴 창을 띄운다.
+        if(Input.GetButtonDown("Cancel"))
+        {
+            SubMenuActive();
+        }
+    }
+
+    public void SubMenuActive()
+    {
+        // [19] Menu Set : 2) ESC 버튼을 누를 경우 메뉴창이 띄워저 있는지 확인하여 활성화 비활성화 한다.
+        if(menuSet.activeSelf)
+        {
+            menuSet.SetActive(false);
+        }
+        else
+            menuSet.SetActive(true);
     }
 
     public void Action(GameObject scanObj)
@@ -65,7 +94,8 @@ public class C2GameManager : MonoBehaviour
             isAction = false;
             talkIndex = 0;
             // [11] Quest Structure : 6) 대화가 끝나면 퀘스트 인덱스가 증가한다.
-            Debug.Log(questManager.CheckQuest(id));
+            // [20] Title
+            questText.text = questManager.CheckQuest(id);
             return;
         }
 
@@ -96,5 +126,46 @@ public class C2GameManager : MonoBehaviour
 
         // [9] Long Talk : 3) 대화가 진행되기 위해 대화문을 한 번 출력할 때마다 인덱스도 증가 시킨다.
         talkIndex++;
+    }
+
+    // [22] Save
+    public void GameSave()
+    {
+        // Player x/y
+        PlayerPrefs.SetFloat("PlayerX", player.transform.position.x);
+        PlayerPrefs.SetFloat("PlayerY", player.transform.position.y);
+        // Quest ID
+        PlayerPrefs.SetInt("QuestID", questManager.questId);
+        // Quest Action Indeex
+        PlayerPrefs.SetInt("QuestActionIndex", questManager.questActionIndex);
+        PlayerPrefs.Save();
+
+        menuSet.SetActive(false);
+    }
+
+    public void GameLoad()
+    {
+        // [22] Save : 1) 한 번도 세이브 한 적이 없다면 반환
+        if(!PlayerPrefs.HasKey("PlayerX"))
+        {
+            return;
+        }
+
+        float x = PlayerPrefs.GetFloat("PlayerX");
+        float y = PlayerPrefs.GetFloat("PlayerY");
+        int questId = PlayerPrefs.GetInt("QuestID");
+        int questActionIndex = PlayerPrefs.GetInt("QuestActionIndex");
+
+        player.transform.position = new Vector3(x, y, 0);
+        questManager.questId = questId;
+        questManager.questActionIndex = questActionIndex;
+        // [22] Save
+        questManager.ControlObject();
+    }
+
+    // [21] QUIT
+    public void GameExit()
+    {
+        Application.Quit();
     }
 }
