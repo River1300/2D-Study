@@ -55,13 +55,11 @@ public class C3TalkManager : MonoBehaviour
             // [14] Exception : 2) 그런데 만약 퀘스트 대화문이 없는 오브젝트라면? 일반 대화문을 출력한다.
             if(!talkData.ContainsKey(id - id % 10))
             {
-                if(talkIndex == talkData[id - id %100].Length) return null;
-                else return GetTalk(id - id % 100, talkIndex);
+                return GetTalk(id - id % 100, talkIndex);
             }
             else
             {   
-                if(talkIndex == talkData[id - id %10].Length) return null;
-                else return GetTalk(id - id % 10, talkIndex);
+                return GetTalk(id - id % 10, talkIndex);
             }
         }
 

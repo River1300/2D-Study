@@ -46,6 +46,11 @@ public class C4QuestManager : MonoBehaviour
         return questList[questId].questName;
     }
 
+    public string CheckQuest()
+    {
+        return questList[questId].questName;
+    }
+
     // [12] Next Quest
     void NextQuest()
     {

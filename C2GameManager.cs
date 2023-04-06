@@ -7,9 +7,10 @@ public class C2GameManager : MonoBehaviour
 {
     // [5] Object Name
     public GameObject scanObject;
-    public Text talkText;
+    // [16] Text Anim : 10) Text 변수를 스크립트로 전환하여 함수를 호출하도록 한다.
+    public C5TypeEffect talk;
     // [6] Talk Panel
-    public GameObject talkPanel;
+    public Animator talkPanel;
     public bool isAction;
     // [8] Talk
     public C3TalkManager talkManager;
@@ -18,6 +19,14 @@ public class C2GameManager : MonoBehaviour
     public Image portraitImg;
     // [11] Quest Structure
     public C4QuestManager questManager;
+    // [15] Portrait Anim
+    public Animator portraitAnim;
+    public Sprite prevPortrait;
+
+    void Start()
+    {
+        Debug.Log(questManager.CheckQuest());
+    }
 
     public void Action(GameObject scanObj)
     {
@@ -26,16 +35,29 @@ public class C2GameManager : MonoBehaviour
         C3ObjData objData = scanObject.GetComponent<C3ObjData>();
         Talk(objData.id, objData.isNPC);
 
-        talkPanel.SetActive(isAction);
+        talkPanel.SetBool("isShow", isAction);
     }
 
     // [8] Talk : 4) 대사를 반환 받으면 문자열로 저장한다.
     void Talk(int id, bool isNpc)
     {
-        // [11] Quest Structure : 2) 해당 오브젝트의 퀘스트 아이디를 받아온다.
-        // [11] Quest Structure : 3) 대화문을 반환받을 때 매개 변수로 퀘스트 번호를 더한 값을 보낸다.
-        int questTalkIndex = questManager.GetQuestTalkIndex(id);
-        string talkData = talkManager.GetTalk(id + questTalkIndex, talkIndex);
+        // [18] Text Complete : 1) 대사 중 스페이스바를 누르면
+        int questTalkIndex = 0;
+        string talkData = "";
+
+        // [18] Text Complete : 2) 애니매이션이 실행 중이라면 반환
+        if(talk.isAnim)
+        {
+            talk.SetMsg("");
+            return;
+        }
+        else        // [18] Text Complete : 3) 애니매이션이 실행 중이 아니라면 그대로 다음 대사를 진행
+        {
+            // [11] Quest Structure : 2) 해당 오브젝트의 퀘스트 아이디를 받아온다.
+            // [11] Quest Structure : 3) 대화문을 반환받을 때 매개 변수로 퀘스트 번호를 더한 값을 보낸다.
+            questTalkIndex = questManager.GetQuestTalkIndex(id);
+            talkData = talkManager.GetTalk(id + questTalkIndex, talkIndex);
+        }
 
         // [9] Long Talk : 2) 대사를 반환받지 못하고 null을 전환 받았다면 해당 오브젝트와의 대화가 끝났다는 의미
         if(talkData == null)
@@ -50,15 +72,23 @@ public class C2GameManager : MonoBehaviour
         if(isNpc)
         {
             // [10] Portrait : 5) 대화문의 문자열을 구분자로 나누고 구분자 앞은 출력, 뒤는 초상화 인덱스로 활용한다.
-            talkText.text = talkData.Split(':')[0];
+            // [16] Text Anim
+            talk.SetMsg(talkData.Split(':')[0]);
             portraitImg.sprite = talkManager.GetPortrait(id, int.Parse(talkData.Split(':')[1]));
 
             // [10] Portrait
             portraitImg.color = new Color(1, 1, 1, 1);
+
+            // [15] Portrait Anim : 1) 이전의 초상화와 현재의 초상화가 다른 이미지라면 트리거 발동
+            if(prevPortrait != portraitImg.sprite)
+            {
+                portraitAnim.SetTrigger("doEffect");
+                prevPortrait = portraitImg.sprite;
+            }
         }
         else
         {
-            talkText.text = talkData;
+            talk.SetMsg(talkData);
 
             portraitImg.color = new Color(1, 1, 1, 0);
         }
