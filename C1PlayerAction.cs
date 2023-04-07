@@ -153,6 +153,7 @@ public class C1PlayerAction : MonoBehaviour
                 right_Value = 1;
                 right_Down = true;
                 break;
+            // [24] Action Key : 1) 게임 매니저의 함수 호출
             case "A":
                 if(scanObject != null)
                     manager.Action(scanObject);
