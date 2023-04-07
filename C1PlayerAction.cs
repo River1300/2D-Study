@@ -17,6 +17,19 @@ public class C1PlayerAction : MonoBehaviour
     GameObject scanObject;
     // [5] Object Name
     public C2GameManager manager;
+    // [23] Button Move
+    int up_Value;
+    int down_Value;
+    int left_Value;
+    int right_Value;
+    bool up_Down;
+    bool down_Down;
+    bool left_Down;
+    bool right_Down;
+    bool up_Up;
+    bool down_Up;
+    bool left_Up;
+    bool right_Up;
 
     void Awake()
     {
@@ -34,6 +47,16 @@ public class C1PlayerAction : MonoBehaviour
             // [5] Object Name
             manager.Action(scanObject);
         }
+
+        // [23] Button Move : 5) 프레임이 넘어가면 변수값 초기화
+        up_Down = false;
+        down_Down = false;
+        left_Down = false;
+        right_Down = false;
+        up_Up = false;
+        down_Up = false;
+        left_Up = false;
+        right_Up = false;
     }
 
     void FixedUpdate()
@@ -60,15 +83,17 @@ public class C1PlayerAction : MonoBehaviour
     void PlayerMove()
     {
         // [1] Player Move
-        h = manager.isAction ? 0 : Input.GetAxisRaw("Horizontal");
-        v = manager.isAction ? 0 : Input.GetAxisRaw("Vertical");
+        // [23] Button Move : 3) 정수형 변수를 이동 값에 더해 준다.
+        h = manager.isAction ? 0 : Input.GetAxisRaw("Horizontal") + right_Value + left_Value;
+        v = manager.isAction ? 0 : Input.GetAxisRaw("Vertical") + up_Value + down_Value;
 
         // [2] Cross Move : 3) 입력받은 버튼을 저장하고 그 값에 따라 수평값이 참인지 거짓인지 배정
         // [3] Animation : 2) 동시에 키 입력이 있을 경우 방향을 잡지 못하는 경우가 발생한다. 버튼을 때었을 때 수평 값이 있는지 없는지를 확인한다.
-        bool hDown = manager.isAction ? false : Input.GetButtonDown("Horizontal");
-        bool vDown = manager.isAction ? false : Input.GetButtonDown("Vertical");
-        bool hUp = manager.isAction ? false : Input.GetButtonUp("Horizontal");
-        bool vUp = manager.isAction ? false : Input.GetButtonUp("Vertical");
+        // [23] Button Move : 4) bool 형 변수의 참 거짓을 or로 전달 한다.
+        bool hDown = manager.isAction ? false : Input.GetButtonDown("Horizontal") || right_Down || left_Down;
+        bool vDown = manager.isAction ? false : Input.GetButtonDown("Vertical") || up_Down || down_Down;
+        bool hUp = manager.isAction ? false : Input.GetButtonUp("Horizontal") || right_Up || left_Up;
+        bool vUp = manager.isAction ? false : Input.GetButtonUp("Vertical") || up_Up || down_Up;
         if(hDown)
             isHorizonMove = true;
         else if(vDown)
@@ -103,6 +128,61 @@ public class C1PlayerAction : MonoBehaviour
                 dirVec = Vector3.left;
             else if(h == 1)
                 dirVec = Vector3.right;
+        }
+    }
+
+    // [23] Button Move : 1) 방향키가 4개 이므로 문자로 구분하여 움직이도록 한다.
+    public void ButtonDown(string type)
+    {
+        switch(type)
+        {
+            // [23] Button Move : 2) 버튼 입력에 따라 변수에 정수, bool 값을 넣어 준다.
+            case "U":
+                up_Value = 1;
+                up_Down = true;
+                break;
+            case "D":
+                down_Value = -1;
+                down_Down = true;
+                break;
+            case "L":
+                left_Value = -1;
+                left_Down = true;
+                break;
+            case "R":
+                right_Value = 1;
+                right_Down = true;
+                break;
+            case "A":
+                if(scanObject != null)
+                    manager.Action(scanObject);
+                break;
+            case "C":
+                manager.SubMenuActive();
+                break;
+        }
+    }
+
+    public void ButtonUp(string type)
+    {
+        switch(type)
+        {
+            case "U":
+                up_Value = 0;
+                up_Up = true;
+                break;
+            case "D":
+                down_Value = 0;
+                down_Up = true;
+                break;
+            case "L":
+                left_Value = 0;
+                left_Up = true;
+                break;
+            case "R":
+                right_Value = 0;
+                right_Up = true;
+                break;
         }
     }
 }
