@@ -13,6 +13,8 @@ public class GameManagerCode : MonoBehaviour
     public Text talkText;
     public TalkManagerCode talkManager;
     public int talkIndex;
+    // [9]Portrait : 필요 속성(UI 이미지)
+    public Image portraitImg;
 
     // [5]Object Name : 1) Player가 게임 매니저의 함수를 호출하면서 오브젝트 정보를 매개 변수로 보낸다. -> Player
     public void Action(GameObject scanObj)
@@ -42,11 +44,17 @@ public class GameManagerCode : MonoBehaviour
 
         if(isNpc)
         {   // [8]Talk : 6) talkData에 저장된 대사를 텍스트로 출력한다.
-            talkText.text = talkData;
+            talkText.text = talkData.Split(':')[0];
+            // [9]Portrait : 6) 대화문의 문자열을 구분자로 나누고 구분자 앞은 출력, 뒤는 초상화 인덱스로 활용한다.        
+            portraitImg.sprite = talkManager.GetPortrait(id, int.Parse(talkData.Split(':')[1]));
+            // [9]Portrait : 1) NPC는 초상화가 있으므로 알파값을 1로 설정한다.
+            portraitImg.color = new Color(1, 1, 1, 1);
         }
         else
         {
             talkText.text = talkData;
+            // [9]Portrait : 2) 일반 오브젝트는 초상화가 없으므로 알파값을 0으로 설정한다. -> TalkManager
+            portraitImg.color = new Color(1, 1, 1, 0);
         }
         // [8]Talk : 7) 대사를 출력하려면 당연히 대화창이 띄워져 있어야 한다.
         isAction = true;
