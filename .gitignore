@@ -7,3 +7,6 @@ C4QuestManager.cs.meta
 C4QuestData.cs.meta
 C5TypeEffect.cs.meta
 PlayerCode.cs.meta
+GameManagerCode.cs.meta
+ObjectDataCode.cs.meta
+TalkManagerCode.cs.meta
