@@ -42,10 +42,10 @@ public class GameManagerCode : MonoBehaviour
             return;
         }
 
-        if(isNpc)
+        if(isNPC)
         {   // [8]Talk : 6) talkData에 저장된 대사를 텍스트로 출력한다.
             talkText.text = talkData.Split(':')[0];
-            // [9]Portrait : 6) 대화문의 문자열을 구분자로 나누고 구분자 앞은 출력, 뒤는 초상화 인덱스로 활용한다.        
+            // [9]Portrait : 6) 대화문의 문자열을 구분자로 나누고 구분자 앞은 출력, 뒤는 초상화 인덱스로 활용한다. -> QuestData
             portraitImg.sprite = talkManager.GetPortrait(id, int.Parse(talkData.Split(':')[1]));
             // [9]Portrait : 1) NPC는 초상화가 있으므로 알파값을 1로 설정한다.
             portraitImg.color = new Color(1, 1, 1, 1);
